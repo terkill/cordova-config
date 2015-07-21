@@ -171,6 +171,26 @@ module.exports = (function() {
         this._root.append(preference);
     };
 
+    Config.prototype.setPlatformPreference = function(platformName, name, value) {
+        var platform = this._doc.find('./platform/[@name="' + platformName + '"]');
+        if(!platform) {
+            platform = new et.Element('platform');
+            platform.attrib.name = platformName;
+            this._root.append(platform);
+        }
+
+        var preference = platform.find('./preference/[@name="' + name +'"]');
+        if(preference) {
+            platform.remove(preference);
+        }
+
+        preference = new et.Element('preference');
+        preference.attrib.name = name;
+        preference.attrib.value = value;
+
+        platform.append(preference);
+    }
+
     /**
      * Removes all the <access /> tags out of the config file.
      */
@@ -222,16 +242,16 @@ module.exports = (function() {
         // Add the access tag to the root
         this._root.append(accessOrigin);
     };
-    
+
     /**
      * This method adds the raw XML provided to the config.xml file.
-     * 
+     *
      * @param {string}  raw         The raw XML that should be added to the config file.
      */
     Config.prototype.addRawXML = function(raw) {
         // Parse the raw XML
         var xml = et.XML(raw);
-        
+
         // Append the XML
         this._root.append(xml);
     };
