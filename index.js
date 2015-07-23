@@ -149,6 +149,19 @@ module.exports = (function() {
     };
 
     /**
+     * Sets the android version code of the config file.
+     *
+     * @param {number} versionCode      The android version code.
+     */
+    Config.prototype.setAndroidVersionCode = function(versionCode) {
+        if(versionCode % 1 !== 0) {
+            throw new Error('Please provide a valid version code.');
+        }
+
+        this._root.attrib['android-versionCode'] = versionCode;
+    };
+
+    /**
      * Adds or updates the preference `name` with the
      * @param {string} name  The name of the preference.
      * @param {*}      value The value of the preference.
